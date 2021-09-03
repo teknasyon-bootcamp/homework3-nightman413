@@ -24,3 +24,84 @@
  * 
  * > **Not: İsteyenler `app2.php` ve `form2.php` isminde dosyalar oluşturup sınıfa farklı özellikler kazandırabilir.
  */
+
+
+
+
+class Form{
+
+    private array $fields = []; //İnputların tutulacağı array'i oluşturur
+    private function __construct(   //Default oalrak boş action ve get methodu oluşturur
+        private string $action = "",
+        private string $method = "GET")
+
+    {}
+
+
+    
+
+    //Post methodu oluşturan fonksiyon:
+    public static function createPostForm(string $action):Form{
+        $form = self::createForm($action,"POST");
+        return $form;
+    }
+
+
+
+    //Get methodu oluşturan fonksiyon:
+    public static function createGetForm(string $action):Form{
+        $form = self::createForm($action,"GET");
+        return $form;
+    }
+
+
+
+    //Form oluşturmaya yarayan fonksiyon:
+    public static function createForm(string $action, string $method):Form{
+        $form = new Form($action,$method);
+        return $form;
+    }
+
+
+
+    //Form alanlarındaki inputları listeye ekleyen fonksiyon:
+    public function addField(string $label, string $name, ?string $defaultValue = null):void{
+        $field["label"] = $label;
+        $field["name"] = $name;
+        $field["defaultValue"] = $defaultValue;
+        array_push($this->fields,$field);
+    }
+
+
+
+    //Methodu değiştiren fonksiyon:
+    public function setMethod(string $method):void{
+        $this->method = $method;
+    }
+
+
+
+    //Oluşturulan formu ekrana basan fonksiyon:
+    public function render():void{
+        echo "<form action='".$this->action."' method='".$this->method."'>";
+        foreach($this->fields as $field){
+            echo "<label for='".$field["label"]."'>".$field["label"]."</label>";
+            if(isset($field["defaultValue"])){
+                echo "<input type='text' name='".$field["name"]."' value='".$field["defaultValue"]."'/>";
+            }
+            else{
+                echo "<input type='text' name='".$field["name"]."'/>";
+            }
+        }
+        echo "<button type='Submit'>Gönder</button>";
+        echo "</form>";
+    }
+
+
+
+
+}
+
+
+
+
